@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Hungerâ€“Diabetes Nexus: How Food Insecurity Shapes Diabetes Across America's Counties</title>
+<title>The Hunger-Diabetes Nexus: How Food Insecurity Shapes Diabetes Across America's Counties</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson@3"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -668,7 +668,7 @@ Promise.all([
   // Populate state filter
   const states = [...new Set(countyData.map(d => d.state))].sort();
   const select = d3.select('#state-filter');
-  states.forEach(s => select.append('option').attr('value', s).text(s + ' â€” ' + (stateNames[Object.keys(stateAbbrevs).find(k => stateAbbrevs[k]===s)] || s)));
+  states.forEach(s => select.append('option').attr('value', s).text(s + ' - ' + (stateNames[Object.keys(stateAbbrevs).find(k => stateAbbrevs[k]===s)] || s)));
 
   // Build all visualizations
   createMap();
@@ -855,7 +855,7 @@ function createScatter() {
 
   // Axes
   scatterG.append('g').attr('class', 'x-axis').attr('transform',`translate(0,${innerH})`)
-    .call(d3.axisBottom(xScale).tickValues([0, 10, 20, 30]).tickFormat(d=>d+'%'))
+    .call(d3.axisBottom(xScale).tickValues([0, 5, 10, 15, 20, 25, 30]).tickFormat(d=>d+'%'))
     .selectAll('text').style('font-size','0.75rem');
 
   scatterG.append('g').attr('class', 'y-axis')
