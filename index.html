@@ -496,8 +496,9 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
   <span class="section-label">Methodological Notes</span>
   <h2>Limitations</h2>
   <div class="limitations-box">
-    <p>While the correlation between food insecurity and diabetes is strong, this analysis shows association rather than causation. Both conditions may be independently driven by underlying factorsâ€”poverty, limited education, lack of healthcare accessâ€”rather than food insecurity directly causing diabetes. Reverse causation is also plausible: the financial burden of managing diabetes (medications, medical appointments) can itself push households into food insecurity.</p>
-    <p>Diabetes data from CDC PLACES reflect self-reported diagnoses, meaning they likely undercount true prevalence by missing undiagnosed cases. Food insecurity estimates from County Health Rankings rely on modeling and may not capture seasonal variation or acute disruptions. County-level aggregation introduces the <em>ecological fallacy</em>â€”average rates for a county do not describe any individual resident's experience. A county with 15% diabetes prevalence still has 85% of adults without a diagnosis. The analysis covers 2023 data from 2,945 of roughly 3,143 U.S. counties; the 198 missing counties (6.3%) may introduce minor geographic bias. Finally, patterns observed in a single year may shift over time as economic conditions, food systems, and policy environments change.</p>
+    <p>This analysis identifies a clear association between county-level food insecurity and diabetes prevalence, but it does not establish causality. Both outcomes may be influenced by shared underlying factors such as income, education, healthcare access, or demographic composition, and reverse causality is also possible if the financial burden of managing diabetes contributes to food insecurity.</p>
+    <p>Measurement limitations are present in both data sources. Diabetes prevalence from CDC PLACES is based on self-reported diagnoses and may understate true prevalence by excluding undiagnosed cases, while food insecurity estimates from County Health Rankings rely on modeled data that may not capture short-term or seasonal variation. In addition, county-level aggregation introduces the risk of ecological fallacy, as average county rates do not reflect individual experiences.</p>
+    <p>Finally, the analysis uses data from a single year and excludes a small number of counties with missing information. As a result, the observed patterns may change over time as economic conditions, food systems, and public health environments evolve.<p>
   </div>
 </section>
 
@@ -515,10 +516,10 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
   <div class="footer-inner">
     <h4>Credits &amp; Attribution</h4>
     <p>
-      <strong>Data:</strong> CDC PLACES (<a href="https://www.cdc.gov/places/" target="_blank">cdc.gov/places</a>) Â· County Health Rankings (<a href="https://www.countyhealthrankings.org/" target="_blank">countyhealthrankings.org</a>)<br>
+      <strong>Data:</strong> CDC PLACES (<a href="https://www.cdc.gov/places/" target="_blank">cdc.gov/places</a>) · County Health Rankings (<a href="https://www.countyhealthrankings.org/" target="_blank">countyhealthrankings.org</a>)<br>
       <strong>Visualization:</strong> Built with <a href="https://d3js.org/" target="_blank">D3.js v7</a> and <a href="https://github.com/topojson/topojson" target="_blank">TopoJSON</a><br>
       <strong>Geography:</strong> U.S. Census Bureau cartographic boundary files via <a href="https://github.com/topojson/us-atlas" target="_blank">us-atlas</a><br>
-      <strong>Created:</strong> 2025 Â· Interactive Policy Brief
+      <strong>Created:</strong> 2025 · Interactive Policy Brief
     </p>
   </div>
 </footer>
