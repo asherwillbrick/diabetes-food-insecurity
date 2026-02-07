@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Hunger-Diabetes Nexus: How Food Insecurity Shapes Diabetes Across America's Counties</title>
+<title>Food Insecurity and Diabetes Across the U.S.</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson@3"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -377,7 +377,7 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
 <!-- HERO -->
 <header class="hero">
   <div class="tag">County-Level Analysis</div>
-  <h1>The Hunger-Diabetes Nexus</h1>
+  <h1>Food Insecurity and Diabetes Across the U.S.</h1>
   <p class="subtitle">How food insecurity shapes diabetes prevalence across 2,945 U.S. counties and why targeted interventions could save lives and billions in healthcare costs.</p>
 </header>
 
@@ -385,9 +385,9 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
 <div class="container">
 <section class="animate-in">
   <span class="section-label">Introduction</span>
-  <h2>Two Crises, One Root Problem</h2>
+  <h2>Background and Motivation</h2>
   <p class="lead">Nearly 38 million Americans live with diabetes, while roughly 1 in 8 households struggles to afford enough food. These twin public health crises share a deep connection and the data reveal just how intertwined they are.</p>
-  <p>This analysis examines county-level data across all 50 states and the District of Columbia to answer a pressing policy question: <em>How does diabetes prevalence vary across U.S. counties with different levels of food insecurity?</em> The answer matters enormously. Diabetes costs the nation over $400 billion annually in medical expenses and lost productivity, while food insecurity drives poor diet quality and reliance on cheap, calorie-dense, nutrient-poor foods that fuel chronic disease. If food access is a meaningful driver of diabetes risk, then food assistance programs become not just anti-hunger tools, but preventive health investments.</p>
+  <p>This analysis examines county-level data across 47 states and the District of Columbia to answer a pressing policy question: <em>How does diabetes prevalence vary across U.S. counties with different levels of food insecurity?</em> The answer matters enormously. Diabetes costs the nation over $400 billion annually in medical expenses and lost productivity, while food insecurity drives poor diet quality and reliance on cheap, calorie-dense, nutrient-poor foods that fuel chronic disease. If food access is a meaningful driver of diabetes risk, then food assistance programs become not just anti-hunger tools, but preventive health investments.</p>
 
   <div class="stat-row">
     <div class="stat-card">
@@ -408,7 +408,7 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
 <!-- VIZ 1: MAP -->
 <section>
   <span class="section-label">Visualization 1 : Geographic Patterns</span>
-  <h2>Mapping America's Double Burden</h2>
+  <h2>Geographic Patterns in Food Insecurity and Diabetes</h2>
   <p>The interactive map below paints a vivid geographic picture. Toggle between diabetes prevalence and food insecurity to see how the two conditions cluster in the same regions, particularly across the Deep South, Appalachia, and parts of the Southwest. Counties in Mississippi average 17.7% diabetes prevalence alongside 18.2% food insecurity, both well above the national county medians. Meanwhile, counties in Colorado, Massachusetts, and New Hampshire consistently sit at the lower end of both measures. This regional concentration suggests that place-based factor like poverty, limited grocery access, and fewer healthcare providers, compound to create environments where both food insecurity and diabetes thrive together.</p>
   <p>Over one-third of all U.S. counties (1,050 of 2,945) carry a "double burden," with above-average rates of both diabetes and food insecurity simultaneously. These are the communities where targeted, multi-pronged interventions could yield the greatest returns. The geographic clustering also points to systemic causes: these are not random patterns, but reflections of entrenched structural inequities in food systems and healthcare infrastructure.</p>
 
@@ -427,7 +427,7 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
 <!-- VIZ 2: SCATTER -->
 <section>
   <span class="section-label">Visualization 2 : The Core Relationship</span>
-  <h2>More Food Insecurity, More Diabetes</h2>
+  <h2>Counties with Higher Food Insecurity Tend to Have More Diabetes</h2>
   <p>The scatter plot below places each county as a single point, with food insecurity on the horizontal axis and diabetes prevalence on the vertical axis. The upward trend is unmistakable: a strong positive correlation of r = 0.69 confirms that counties struggling with food access also tend to carry heavier diabetes burdens. Specifically, counties in the lowest food-insecurity quintile (under 9.2%) average just 11.5% diabetes prevalence, while those in the highest quintile (above 15.5%) average 17.0% That's a gap of 5.5 percentage points affecting millions of people.</p>
   <p>Use the dropdown to highlight individual states and observe how the pattern holds everywhere but with regional offsets. West Virginia counties, for example, cluster high on diabetes even at moderate food-insecurity levels, hinting at additional risk factors such as an older population and lower physical activity. The dashed trend line captures the overall direction: for roughly every 1 percentage point increase in food insecurity, diabetes prevalence rises by about 0.5 percentage points. This dose-response pattern strengthens the case that food insecurity is not merely coexisting with diabetes but may be actively shaping its prevalence through poor nutrition, stress, and barriers to disease management.</p>
 
@@ -450,7 +450,7 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
 <!-- VIZ 3: HISTOGRAM -->
 <section>
   <span class="section-label">Visualization 3 : Distributional Insight</span>
-  <h2>The Full Picture: Distributions Tell the Story</h2>
+  <h2>How Diabetes Prevalence Varies Across Food Insecurity Groups</h2>
   <p>Averages can mask important variation, so this histogram compares the full distribution of diabetes prevalence across three groups of counties: those with low food insecurity (under 10%), moderate food insecurity (10-18%), and high food insecurity (18% or above). The shift is dramatic. Low-food-insecurity counties cluster tightly around 10-12% diabetes, while high-food-insecurity counties spread broadly between 14% and 22%. Not only are high-food-insecurity counties sicker on average (18.6% vs. 11.7% diabetes), they also exhibit greater variability with a standard deviation of 2.7 percentage points compared to 1.8 in food-secure counties. This wider spread suggests that food insecurity interacts with other local conditions such as healthcare access, demographic composition, and economic opportunity to amplify or moderate diabetes risk in unpredictable ways.</p>
 
   <div class="viz-container">
@@ -470,7 +470,7 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
   <span class="section-label">Synthesis</span>
   <h2>Key Findings</h2>
   <ul class="findings-list">
-    <li><strong>A strong, consistent relationship:</strong> The correlation between county-level food insecurity and diabetes prevalence is r = 0.69â€”counties where food is harder to access consistently show higher diabetes rates.</li>
+    <li><strong>A strong, consistent relationship:</strong> There is a correlation between county-level food insecurity and diabetes. Counties where food is harder to access consistently show higher diabetes rates.</li>
     <li><strong>A 5.5 percentage-point gap:</strong> Counties in the highest food-insecurity quintile average 17.0% diabetes prevalence versus 11.5% in the lowest quintile, a difference that translates to tens of thousands of additional diabetes cases nationwide.</li>
     <li><strong>Geographic clustering in the South:</strong> Mississippi, Alabama, Louisiana, and West Virginia lead the nation on both measures, signaling that structural economic and infrastructure disadvantages drive both crises simultaneously.</li>
     <li><strong>Greater variability where food is scarce:</strong> High-food-insecurity counties show wider spread in diabetes rates (SD = 2.7 vs. 1.8), indicating that food access interacts with other local factors to shape health outcomes.</li>
@@ -482,7 +482,7 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
 <section>
   <span class="section-label">Implications</span>
   <h2>What Policymakers Should Take Away</h2>
-  <p>These findings suggest that investing in food security is not just compassionate policyâ€”it is preventive healthcare. Every dollar spent expanding food access in high-burden counties may reduce downstream diabetes costs, which currently exceed $10,000 per patient annually. Policymakers at every level can act.</p>
+  <p>These findings suggest that investing in food security is not just compassionate policy, it is preventive healthcare. Every dollar spent expanding food access in high-burden counties may reduce downstream diabetes costs, which currently exceed $10,000 per patient annually. Policymakers at every level can act.</p>
   <div class="policy-grid">
     <div class="policy-card">
       <h4>Expand SNAP Benefits</h4>
@@ -508,7 +508,6 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
   <span class="section-label">Methodological Notes</span>
   <h2>Limitations</h2>
   <div class="limitations-box">
-    <h4>Interpreting These Findings Responsibly</h4>
     <p>While the correlation between food insecurity and diabetes is strong, this analysis shows association rather than causation. Both conditions may be independently driven by underlying factorsâ€”poverty, limited education, lack of healthcare accessâ€”rather than food insecurity directly causing diabetes. Reverse causation is also plausible: the financial burden of managing diabetes (medications, medical appointments) can itself push households into food insecurity.</p>
     <p>Diabetes data from CDC PLACES reflect self-reported diagnoses, meaning they likely undercount true prevalence by missing undiagnosed cases. Food insecurity estimates from County Health Rankings rely on modeling and may not capture seasonal variation or acute disruptions. County-level aggregation introduces the <em>ecological fallacy</em>â€”average rates for a county do not describe any individual resident's experience. A county with 15% diabetes prevalence still has 85% of adults without a diagnosis. The analysis covers 2023 data from 2,945 of roughly 3,143 U.S. counties; the 198 missing counties (6.3%) may introduce minor geographic bias. Finally, patterns observed in a single year may shift over time as economic conditions, food systems, and policy environments change.</p>
   </div>
@@ -1046,8 +1045,8 @@ function createHistogram() {
   const colors = { low: '#14b8a6', mid: '#94a3b8', high: '#f59e0b' };
   const groups = [
     { key: 'low', bins: binsLow, color: colors.low, label: 'Low FI (<10%)', n: low.length },
-    { key: 'mid', bins: binsMid, color: colors.mid, label: 'Moderate FI (10â€“18%)', n: mid.length },
-    { key: 'high', bins: binsHigh, color: colors.high, label: 'High FI (â‰¥18%)', n: high.length }
+    { key: 'mid', bins: binsMid, color: colors.mid, label: 'Moderate FI (10-18%)', n: mid.length },
+    { key: 'high', bins: binsHigh, color: colors.high, label: 'High FI (>18%)', n: high.length }
   ];
 
   const barWidth = (x(binsLow[0].x1) - x(binsLow[0].x0));
