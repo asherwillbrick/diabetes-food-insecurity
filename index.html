@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hungerâ€“Diabetes Nexus: How Food Insecurity Shapes Diabetes Across America's Counties</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson@3"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1a2744;
+  --slate: #2c3e5a;
+  --teal: #0f766e;
+  --teal-light: #14b8a6;
+  --warm: #d97706;
+  --warm-light: #f59e0b;
+  --bg: #f8f7f4;
+  --card: #ffffff;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --border: #e2e8f0;
+  --accent-red: #dc2626;
+  --accent-blue: #2563eb;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--slate) 60%, var(--teal) 100%);
+  color: white;
+  padding: 5rem 2rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 1;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  max-width: 850px;
+  margin: 0 auto 1rem;
+  position: relative;
+  letter-spacing: -0.02em;
+}
+
+.hero .subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 300;
+  opacity: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+  color: white;
+}
+
+.hero .tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.35rem 1rem;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+section {
+  padding: 3.5rem 0;
+}
+
+section + section {
+  border-top: 1px solid var(--border);
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--teal);
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin-bottom: 1rem;
+  color: var(--navy);
+}
+
+p {
+  margin-bottom: 1rem;
+  font-size: 1.02rem;
+  color: var(--text);
+}
+
+p.lead {
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text-light);
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: box-shadow 0.2s;
+}
+
+.stat-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+
+.stat-card .num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.2rem;
+  color: var(--teal);
+  line-height: 1.1;
+}
+
+.stat-card .label {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-top: 0.35rem;
+  font-weight: 500;
+}
+
+.viz-container {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.viz-controls label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-right: 0.25rem;
+}
+
+.btn-toggle {
+  padding: 0.45rem 1rem;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  border-radius: 6px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-toggle:hover { border-color: var(--teal); color: var(--teal); }
+.btn-toggle.active {
+  background: var(--teal);
+  color: white;
+  border-color: var(--teal);
+}
+
+select.viz-select {
+  padding: 0.45rem 0.75rem;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.85rem;
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.tooltip {
+  position: fixed;
+  background: var(--navy);
+  color: white;
+  padding: 0.65rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 1000;
+  max-width: 280px;
+  line-height: 1.5;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+.tooltip strong { color: var(--teal-light); }
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.legend-bar {
+  width: 180px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.findings-list {
+  list-style: none;
+  padding: 0;
+}
+
+.findings-list li {
+  padding: 0.75rem 0 0.75rem 1.5rem;
+  position: relative;
+  font-size: 1rem;
+}
+
+.findings-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1.1rem;
+  width: 8px;
+  height: 8px;
+  background: var(--teal);
+  border-radius: 50%;
+}
+
+.policy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.policy-card {
+  background: linear-gradient(135deg, #f0fdfa, #f8f7f4);
+  border: 1px solid #ccfbf1;
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.policy-card h4 {
+  font-size: 1.1rem;
+  color: var(--teal);
+  margin-bottom: 0.5rem;
+}
+
+.policy-card p { font-size: 0.92rem; margin-bottom: 0; }
+
+.limitations-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.limitations-box h4 {
+  color: var(--warm);
+  margin-bottom: 0.75rem;
+}
+
+footer {
+  background: var(--navy);
+  color: white;
+  padding: 2.5rem 2rem;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+footer a { color: var(--teal-light); }
+
+footer .footer-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+footer h4 {
+  color: white;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+svg text { font-family: 'IBM Plex Sans', sans-serif; }
+
+.map-svg { width: 100%; }
+
+.scatter-dot {
+  cursor: pointer;
+  transition: r 0.15s;
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 3rem 1.5rem 2.5rem; }
+  .container { padding: 0 1.25rem; }
+  section { padding: 2.5rem 0; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  .viz-container { padding: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .stat-row { grid-template-columns: 1fr; }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.scatter-regression { stroke-dasharray: 6 4; }
+</style>
+</head>
+<body>
+
+<div class="tooltip" id="tooltip"></div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="tag">County-Level Policy Analysis</div>
+  <h1>The Hungerâ€“Diabetes Nexus</h1>
+  <p class="subtitle">How food insecurity shapes diabetes prevalence across 2,945 U.S. countiesâ€”and why targeted interventions could save lives and billions in healthcare costs.</p>
+</header>
+
+<!-- INTRODUCTION -->
+<div class="container">
+<section class="animate-in">
+  <span class="section-label">Introduction</span>
+  <h2>Two Crises, One Root Problem</h2>
+  <p class="lead">Nearly 38 million Americans live with diabetes, while roughly 1 in 8 households struggles to afford enough food. These twin public health crises share a deep connectionâ€”and the data reveal just how intertwined they are.</p>
+  <p>This analysis examines county-level data across all 50 states and the District of Columbia to answer a pressing policy question: <em>How does diabetes prevalence vary across U.S. counties with different levels of food insecurity?</em> The answer matters enormously. Diabetes costs the nation over $400 billion annually in medical expenses and lost productivity, while food insecurity drives poor diet qualityâ€”reliance on cheap, calorie-dense, nutrient-poor foods that fuel chronic disease. If food access is a meaningful driver of diabetes risk, then food assistance programs become not just anti-hunger tools, but preventive health investments.</p>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="num">2,945</div>
+      <div class="label">U.S. Counties Analyzed</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">5.5 pp</div>
+      <div class="label">Diabetes Gap Between Highest<br>&amp; Lowest Food-Insecurity Quintiles</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">36%</div>
+      <div class="label">Counties Facing a<br>"Double Burden"</div>
+    </div>
+  </div>
+</section>
+
+<!-- VIZ 1: MAP -->
+<section>
+  <span class="section-label">Visualization 1 â€” Geographic Patterns</span>
+  <h2>Mapping America's Double Burden</h2>
+  <p>The interactive map below paints a vivid geographic picture. Toggle between diabetes prevalence and food insecurity to see how the two conditions cluster in the same regionsâ€”particularly across the Deep South, Appalachia, and parts of the Southwest. Counties in Mississippi average 17.7% diabetes prevalence alongside 18.2% food insecurity, both well above the national county medians. Meanwhile, counties in Colorado, Massachusetts, and New Hampshire consistently sit at the lower end of both measures. This regional concentration suggests that place-based factorsâ€”poverty, limited grocery access, fewer healthcare providersâ€”compound to create environments where both food insecurity and diabetes thrive together.</p>
+  <p>Over one-third of all U.S. counties (1,050 of 2,945) carry a "double burden," with above-average rates of both diabetes and food insecurity simultaneously. These are the communities where targeted, multi-pronged interventions could yield the greatest returnâ€”combining SNAP expansion, mobile health clinics, and diabetes prevention programs in a single coordinated effort. The geographic clustering also points to systemic causes: these are not random patterns, but reflections of entrenched structural inequities in food systems and healthcare infrastructure.</p>
+
+  <div class="viz-container">
+    <div class="viz-controls">
+      <label>Show:</label>
+      <button class="btn-toggle active" id="btn-diabetes" onclick="toggleMapMetric('diabetes')">Diabetes Prevalence</button>
+      <button class="btn-toggle" id="btn-food" onclick="toggleMapMetric('food')">Food Insecurity</button>
+    </div>
+    <div id="map-container"></div>
+    <div class="legend" id="map-legend"></div>
+    <p style="font-size:0.78rem;color:var(--text-light);margin-top:0.5rem;margin-bottom:0;">Hover over any county for details. Scroll to zoom; drag to pan. Counties in gray have no data available.</p>
+  </div>
+</section>
+
+<!-- VIZ 2: SCATTER -->
+<section>
+  <span class="section-label">Visualization 2 â€” The Core Relationship</span>
+  <h2>More Food Insecurity, More Diabetes</h2>
+  <p>The scatter plot below places each county as a single point, with food insecurity on the horizontal axis and diabetes prevalence on the vertical axis. The upward trend is unmistakable: a strong positive correlation of r = 0.69 confirms that counties struggling with food access also tend to carry heavier diabetes burdens. Specifically, counties in the lowest food-insecurity quintile (under 9.2%) average just 11.5% diabetes prevalence, while those in the highest quintile (above 15.5%) average 17.0%â€”a gap of 5.5 percentage points affecting millions of people.</p>
+  <p>Use the dropdown to highlight individual states and observe how the pattern holds everywhere but with regional offsets. West Virginia counties, for example, cluster high on diabetes even at moderate food-insecurity levels, hinting at additional risk factors such as an older population and lower physical activity. The dashed trend line captures the overall direction: for roughly every 1 percentage point increase in food insecurity, diabetes prevalence rises by about 0.5 percentage points. This dose-response pattern strengthens the case that food insecurity is not merely coexisting with diabetes but may be actively shaping its prevalence through poor nutrition, stress, and barriers to disease management.</p>
+
+  <div class="viz-container">
+    <div class="viz-controls">
+      <label>Highlight State:</label>
+      <select class="viz-select" id="state-filter" onchange="updateScatter()">
+        <option value="all">All States</option>
+      </select>
+    </div>
+    <div id="scatter-container"></div>
+    <div class="legend" id="scatter-legend">
+      <span style="display:inline-block;width:10px;height:10px;background:var(--teal);border-radius:50%;"></span> Counties
+      <span style="margin-left:0.75rem;display:inline-block;width:18px;height:0;border-top:2px dashed var(--warm);vertical-align:middle;"></span> Trend line
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-light);margin-top:0.5rem;margin-bottom:0;">Hover over any point for county details. Select a state to highlight its counties in orange.</p>
+  </div>
+</section>
+
+<!-- VIZ 3: HISTOGRAM -->
+<section>
+  <span class="section-label">Visualization 3 â€” Distributional Insight</span>
+  <h2>The Full Picture: Distributions Tell the Story</h2>
+  <p>Averages can mask important variation, so this histogram compares the full distribution of diabetes prevalence across three groups of counties: those with low food insecurity (under 10%), moderate food insecurity (10â€“18%), and high food insecurity (18% or above). The shift is dramatic. Low-food-insecurity counties cluster tightly around 10â€“12% diabetes, while high-food-insecurity counties spread broadly between 14% and 22%. Not only are high-food-insecurity counties sicker on average (18.6% vs. 11.7% diabetes), they also exhibit greater variabilityâ€”a standard deviation of 2.7 percentage points compared to 1.8 in food-secure counties. This wider spread suggests that food insecurity interacts with other local conditions such as healthcare access, demographic composition, and economic opportunity to amplify or moderate diabetes risk in unpredictable ways.</p>
+
+  <div class="viz-container">
+    <div class="viz-controls">
+      <label>Compare:</label>
+      <button class="btn-toggle active" id="btn-hist-all" onclick="toggleHistMode('all')">All Three Groups</button>
+      <button class="btn-toggle" id="btn-hist-lohi" onclick="toggleHistMode('lohi')">Low vs. High Only</button>
+    </div>
+    <div id="hist-container"></div>
+    <div class="legend" id="hist-legend"></div>
+    <p style="font-size:0.78rem;color:var(--text-light);margin-top:0.5rem;margin-bottom:0;">Hover over bars for exact counts. Toggle view to compare low vs. high food-insecurity counties directly.</p>
+  </div>
+</section>
+
+<!-- KEY FINDINGS -->
+<section>
+  <span class="section-label">Synthesis</span>
+  <h2>Key Findings</h2>
+  <ul class="findings-list">
+    <li><strong>A strong, consistent relationship:</strong> The correlation between county-level food insecurity and diabetes prevalence is r = 0.69â€”counties where food is harder to access consistently show higher diabetes rates.</li>
+    <li><strong>A 5.5 percentage-point gap:</strong> Counties in the highest food-insecurity quintile average 17.0% diabetes prevalence versus 11.5% in the lowest quintile, a difference that translates to tens of thousands of additional diabetes cases nationwide.</li>
+    <li><strong>Geographic clustering in the South:</strong> Mississippi, Alabama, Louisiana, and West Virginia lead the nation on both measures, signaling that structural economic and infrastructure disadvantages drive both crises simultaneously.</li>
+    <li><strong>Greater variability where food is scarce:</strong> High-food-insecurity counties show wider spread in diabetes rates (SD = 2.7 vs. 1.8), indicating that food access interacts with other local factors to shape health outcomes.</li>
+    <li><strong>A double burden in over a third of counties:</strong> 1,050 counties (36%) have above-average rates of both food insecurity and diabetes, concentrating health and economic disadvantage in the same communities.</li>
+  </ul>
+</section>
+
+<!-- POLICY -->
+<section>
+  <span class="section-label">Implications</span>
+  <h2>What Policymakers Should Take Away</h2>
+  <p>These findings suggest that investing in food security is not just compassionate policyâ€”it is preventive healthcare. Every dollar spent expanding food access in high-burden counties may reduce downstream diabetes costs, which currently exceed $10,000 per patient annually. Policymakers at every level can act.</p>
+  <div class="policy-grid">
+    <div class="policy-card">
+      <h4>Expand SNAP Benefits</h4>
+      <p>Increasing Supplemental Nutrition Assistance benefits in the highest-burden counties could directly improve diet quality and reduce the nutrition-diabetes pathway.</p>
+    </div>
+    <div class="policy-card">
+      <h4>Target Prevention Geographically</h4>
+      <p>The map identifies exactly where the double burden concentrates. Federally funded Diabetes Prevention Programs should prioritize these 1,050 counties.</p>
+    </div>
+    <div class="policy-card">
+      <h4>Invest in Food Infrastructure</h4>
+      <p>Rural Southern counties suffer from limited grocery access. Mobile markets, community gardens, and incentive programs for retailers can close food desert gaps.</p>
+    </div>
+    <div class="policy-card">
+      <h4>Integrate Health and Food Systems</h4>
+      <p>Healthcare providers in high-burden areas should screen patients for food insecurity and connect them with assistanceâ€”"food prescriptions" models show early promise.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LIMITATIONS -->
+<section>
+  <span class="section-label">Methodological Notes</span>
+  <h2>Limitations</h2>
+  <div class="limitations-box">
+    <h4>Interpreting These Findings Responsibly</h4>
+    <p>While the correlation between food insecurity and diabetes is strong, this analysis shows association rather than causation. Both conditions may be independently driven by underlying factorsâ€”poverty, limited education, lack of healthcare accessâ€”rather than food insecurity directly causing diabetes. Reverse causation is also plausible: the financial burden of managing diabetes (medications, medical appointments) can itself push households into food insecurity.</p>
+    <p>Diabetes data from CDC PLACES reflect self-reported diagnoses, meaning they likely undercount true prevalence by missing undiagnosed cases. Food insecurity estimates from County Health Rankings rely on modeling and may not capture seasonal variation or acute disruptions. County-level aggregation introduces the <em>ecological fallacy</em>â€”average rates for a county do not describe any individual resident's experience. A county with 15% diabetes prevalence still has 85% of adults without a diagnosis. The analysis covers 2023 data from 2,945 of roughly 3,143 U.S. counties; the 198 missing counties (6.3%) may introduce minor geographic bias. Finally, patterns observed in a single year may shift over time as economic conditions, food systems, and policy environments change.</p>
+  </div>
+</section>
+
+<!-- SOURCES -->
+<section>
+  <span class="section-label">Data &amp; Methods</span>
+  <h2>Data Sources &amp; Methodology</h2>
+  <p>Diabetes prevalence data come from the <strong>CDC PLACES</strong> (Population Level Analysis and Community Estimates) program, which provides model-based estimates of diagnosed diabetes among adults aged 18 and older at the census-tract and county level. Food insecurity data come from <strong>County Health Rankings &amp; Roadmaps</strong>, a collaboration between the Robert Wood Johnson Foundation and the University of Wisconsin Population Health Institute, which estimates the share of the population lacking reliable access to sufficient, nutritious food. Both datasets are linked at the county level using Federal Information Processing Standard (FIPS) codes.</p>
+  <p>This analysis aggregates 77,936 census-tract-level observations to 2,945 unique counties for the year 2023, computing mean diabetes prevalence and food insecurity for each county. Pearson correlation and quintile comparisons are used to characterize the relationship. All visualizations were built with D3.js v7 and TopoJSON. County geographic boundaries use the U.S. Census Bureau's cartographic boundary files via the us-atlas package.</p>
+</section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <h4>Credits &amp; Attribution</h4>
+    <p>
+      <strong>Data:</strong> CDC PLACES (<a href="https://www.cdc.gov/places/" target="_blank">cdc.gov/places</a>) Â· County Health Rankings (<a href="https://www.countyhealthrankings.org/" target="_blank">countyhealthrankings.org</a>)<br>
+      <strong>Visualization:</strong> Built with <a href="https://d3js.org/" target="_blank">D3.js v7</a> and <a href="https://github.com/topojson/topojson" target="_blank">TopoJSON</a><br>
+      <strong>Geography:</strong> U.S. Census Bureau cartographic boundary files via <a href="https://github.com/topojson/us-atlas" target="_blank">us-atlas</a><br>
+      <strong>Created:</strong> 2025 Â· Interactive Policy Brief
+    </p>
+  </div>
+</footer>
+
+<script>
+// ========== GLOBALS ==========
+let countyData, countyGeo, stateGeo, countyNames = {};
+let currentMapMetric = 'diabetes';
+let currentHistMode = 'all';
+const tooltip = d3.select('#tooltip');
+
+const stateNames = {
+  "01":"Alabama","02":"Alaska","04":"Arizona","05":"Arkansas","06":"California",
+  "08":"Colorado","09":"Connecticut","10":"Delaware","11":"District of Columbia",
+  "12":"Florida","13":"Georgia","15":"Hawaii","16":"Idaho","17":"Illinois",
+  "18":"Indiana","19":"Iowa","20":"Kansas","21":"Kentucky","22":"Louisiana",
+  "23":"Maine","24":"Maryland","25":"Massachusetts","26":"Michigan","27":"Minnesota",
+  "28":"Mississippi","29":"Missouri","30":"Montana","31":"Nebraska","32":"Nevada",
+  "33":"New Hampshire","34":"New Jersey","35":"New Mexico","36":"New York",
+  "37":"North Carolina","38":"North Dakota","39":"Ohio","40":"Oklahoma",
+  "41":"Oregon","42":"Pennsylvania","44":"Rhode Island","45":"South Carolina",
+  "46":"South Dakota","47":"Tennessee","48":"Texas","49":"Utah","50":"Vermont",
+  "51":"Virginia","53":"Washington","54":"West Virginia","55":"Wisconsin","56":"Wyoming"
+};
+
+const stateAbbrevs = {
+  "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE",
+  "11":"DC","12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA",
+  "20":"KS","21":"KY","22":"LA","23":"ME","24":"MD","25":"MA","26":"MI","27":"MN",
+  "28":"MS","29":"MO","30":"MT","31":"NE","32":"NV","33":"NH","34":"NJ","35":"NM",
+  "36":"NY","37":"NC","38":"ND","39":"OH","40":"OK","41":"OR","42":"PA","44":"RI",
+  "45":"SC","46":"SD","47":"TN","48":"TX","49":"UT","50":"VT","51":"VA","53":"WA",
+  "54":"WV","55":"WI","56":"WY"
+};
+
+function getCountyName(fipsId) {
+  const fips = String(fipsId).padStart(5, '0');
+  if (countyNames[fips]) return countyNames[fips];
+  const stFips = fips.substring(0, 2);
+  const stName = stateNames[stFips] || stFips;
+  return `County ${fips.substring(2)}, ${stName}`;
+}
+
+function showTooltip(event, html) {
+  tooltip.html(html).style('opacity', 1);
+  const ttNode = tooltip.node();
+  const rect = ttNode.getBoundingClientRect();
+  let x = event.clientX + 14;
+  let y = event.clientY - 10;
+  if (x + rect.width > window.innerWidth - 10) x = event.clientX - rect.width - 14;
+  if (y + rect.height > window.innerHeight - 10) y = event.clientY - rect.height - 10;
+  if (y < 10) y = 10;
+  tooltip.style('left', x + 'px').style('top', y + 'px');
+}
+
+function hideTooltip() { tooltip.style('opacity', 0); }
+
+// ========== DATA LOADING ==========
+Promise.all([
+  d3.csv("simple_merged.csv"),
+  d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json"),
+  d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").catch(() => null)
+]).then(([rawData, us, usStates]) => {
+
+  // Extract county names from topology if available
+  const countyFeatures = topojson.feature(us, us.objects.counties).features;
+  countyFeatures.forEach(f => {
+    if (f.properties && f.properties.name) {
+      const stFips = String(f.id).padStart(5,'0').substring(0,2);
+      countyNames[String(f.id).padStart(5,'0')] = f.properties.name + ", " + (stateAbbrevs[stFips] || '');
+    }
+  });
+
+  // Try loading a county names file as backup
+  d3.tsv("https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/counties-10m.tsv").then(namesData => {
+    namesData.forEach(d => {
+      if (d.id && d.name) {
+        const fips = String(d.id).padStart(5,'0');
+        const stFips = fips.substring(0,2);
+        countyNames[fips] = d.name + ", " + (stateAbbrevs[stFips] || '');
+      }
+    });
+  }).catch(() => {
+    // Try another source
+    d3.csv("https://raw.githubusercontent.com/kjhealy/fips-codes/master/state_and_county_fips_master.csv").then(namesData => {
+      namesData.forEach(d => {
+        if (d.fips && d.name) {
+          const fips = String(d.fips).padStart(5,'0');
+          countyNames[fips] = d.name + ", " + (d.state || '');
+        }
+      });
+    }).catch(() => {});
+  });
+
+  // Aggregate CSV data to county level
+  const countyMap = new Map();
+  rawData.forEach(d => {
+    const dp = +d.diabetes_pct;
+    const fp = +d.food_insecurity_pct;
+    if (isNaN(dp) || isNaN(fp)) return;
+    const fips = String(d.fips).padStart(5, '0');
+    if (!countyMap.has(fips)) {
+      countyMap.set(fips, { fips, state: d.state, dVals: [], fVals: [] });
+    }
+    const c = countyMap.get(fips);
+    c.dVals.push(dp);
+    c.fVals.push(fp);
+  });
+
+  countyData = Array.from(countyMap.values()).map(c => ({
+    fips: c.fips,
+    state: c.state,
+    diabetes_pct: d3.mean(c.dVals),
+    food_insecurity_pct: d3.mean(c.fVals)
+  }));
+
+  // Create data lookup by FIPS
+  const dataByFips = new Map(countyData.map(d => [d.fips, d]));
+
+  // Attach data to geo features
+  countyGeo = countyFeatures.map(f => {
+    const fips = String(f.id).padStart(5, '0');
+    const data = dataByFips.get(fips);
+    return { ...f, data };
+  });
+
+  // State boundaries for overlay
+  if (usStates) {
+    stateGeo = topojson.mesh(usStates, usStates.objects.states, (a, b) => a !== b);
+  } else {
+    stateGeo = topojson.mesh(us, us.objects.states || us.objects.counties, (a, b) => {
+      const aS = String(a.id).padStart(5,'0').substring(0,2);
+      const bS = String(b.id).padStart(5,'0').substring(0,2);
+      return aS !== bS;
+    });
+  }
+
+  // Populate state filter
+  const states = [...new Set(countyData.map(d => d.state))].sort();
+  const select = d3.select('#state-filter');
+  states.forEach(s => select.append('option').attr('value', s).text(s + ' â€” ' + (stateNames[Object.keys(stateAbbrevs).find(k => stateAbbrevs[k]===s)] || s)));
+
+  // Build all visualizations
+  createMap();
+  createScatter();
+  createHistogram();
+
+  // Resize handler
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      d3.select('#map-container svg').remove();
+      d3.select('#scatter-container svg').remove();
+      d3.select('#hist-container svg').remove();
+      createMap();
+      createScatter();
+      createHistogram();
+    }, 250);
+  });
+});
+
+// ========== MAP ==========
+function createMap() {
+  const container = document.getElementById('map-container');
+  const w = container.clientWidth;
+  const h = Math.min(w * 0.62, 560);
+
+  const svg = d3.select('#map-container').append('svg')
+    .attr('width', w).attr('height', h)
+    .attr('class', 'map-svg')
+    .attr('viewBox', `0 0 ${w} ${h}`);
+
+  const projection = d3.geoAlbersUsa().fitSize([w - 20, h - 20], { type: "FeatureCollection", features: countyGeo.filter(f => f.data) });
+  const path = d3.geoPath().projection(projection);
+
+  const g = svg.append('g');
+
+  // Zoom
+  const zoom = d3.zoom().scaleExtent([1, 12]).on('zoom', (e) => g.attr('transform', e.transform));
+  svg.call(zoom);
+
+  // Color scales
+  const diabetesScale = d3.scaleQuantize()
+    .domain([6, 24])
+    .range(d3.schemeBlues[7]);
+
+  const foodScale = d3.scaleQuantize()
+    .domain([4, 26])
+    .range(d3.schemeOranges[7]);
+
+  function getColor(d) {
+    if (!d.data) return '#e2e8f0';
+    return currentMapMetric === 'diabetes' ? diabetesScale(d.data.diabetes_pct) : foodScale(d.data.food_insecurity_pct);
+  }
+
+  // Draw counties
+  g.selectAll('path.county')
+    .data(countyGeo)
+    .join('path')
+    .attr('class', 'county')
+    .attr('d', path)
+    .attr('fill', getColor)
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 0.2)
+    .on('mouseover', function(event, d) {
+      d3.select(this).attr('stroke', '#000').attr('stroke-width', 1.2).raise();
+      if (d.data) {
+        const name = getCountyName(d.data.fips);
+        showTooltip(event,
+          `<strong>${name}</strong><br>
+           Diabetes: ${d.data.diabetes_pct.toFixed(1)}%<br>
+           Food Insecurity: ${d.data.food_insecurity_pct.toFixed(1)}%`
+        );
+      }
+    })
+    .on('mousemove', function(event, d) {
+      if (d.data) {
+        const name = getCountyName(d.data.fips);
+        showTooltip(event,
+          `<strong>${name}</strong><br>
+           Diabetes: ${d.data.diabetes_pct.toFixed(1)}%<br>
+           Food Insecurity: ${d.data.food_insecurity_pct.toFixed(1)}%`
+        );
+      }
+    })
+    .on('mouseout', function() {
+      d3.select(this).attr('stroke', '#fff').attr('stroke-width', 0.2);
+      hideTooltip();
+    });
+
+  // State borders
+  if (stateGeo) {
+    g.append('path')
+      .datum(stateGeo)
+      .attr('fill', 'none')
+      .attr('stroke', 'rgba(0,0,0,0.35)')
+      .attr('stroke-width', 0.8)
+      .attr('d', path)
+      .attr('pointer-events', 'none');
+  }
+
+  // Legend
+  updateMapLegend();
+}
+
+function updateMapLegend() {
+  const legend = d3.select('#map-legend');
+  legend.html('');
+  const isD = currentMapMetric === 'diabetes';
+  const colors = isD ? d3.schemeBlues[7] : d3.schemeOranges[7];
+  const lo = isD ? '6%' : '4%';
+  const hi = isD ? '24%' : '26%';
+  const label = isD ? 'Diabetes Prevalence' : 'Food Insecurity Rate';
+
+  legend.append('span').text(lo);
+  const canvas = document.createElement('canvas');
+  canvas.width = 180; canvas.height = 12;
+  const ctx = canvas.getContext('2d');
+  const grad = ctx.createLinearGradient(0,0,180,0);
+  colors.forEach((c, i) => grad.addColorStop(i / (colors.length - 1), c));
+  ctx.fillStyle = grad; ctx.fillRect(0,0,180,12);
+  const img = document.createElement('img');
+  img.src = canvas.toDataURL();
+  img.style.width = '180px'; img.style.height = '12px'; img.style.borderRadius = '3px'; img.style.verticalAlign = 'middle';
+  legend.node().appendChild(img);
+  legend.append('span').text(hi);
+  legend.append('span').style('margin-left','0.75rem').style('font-weight','500').text(label);
+}
+
+function toggleMapMetric(metric) {
+  currentMapMetric = metric;
+  d3.select('#btn-diabetes').classed('active', metric === 'diabetes');
+  d3.select('#btn-food').classed('active', metric === 'food');
+
+  const diabetesScale = d3.scaleQuantize().domain([6, 24]).range(d3.schemeBlues[7]);
+  const foodScale = d3.scaleQuantize().domain([4, 26]).range(d3.schemeOranges[7]);
+
+  d3.selectAll('path.county')
+    .transition().duration(500)
+    .attr('fill', d => {
+      if (!d.data) return '#e2e8f0';
+      return metric === 'diabetes' ? diabetesScale(d.data.diabetes_pct) : foodScale(d.data.food_insecurity_pct);
+    });
+
+  updateMapLegend();
+}
+
+// ========== SCATTER PLOT ==========
+let scatterSvg, scatterG, xScale, yScale;
+
+function createScatter() {
+  const container = document.getElementById('scatter-container');
+  const w = container.clientWidth;
+  const h = Math.min(w * 0.65, 480);
+  const margin = { top: 20, right: 30, bottom: 55, left: 60 };
+
+  scatterSvg = d3.select('#scatter-container').append('svg')
+    .attr('width', w).attr('height', h);
+
+  scatterG = scatterSvg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const innerW = w - margin.left - margin.right;
+  const innerH = h - margin.top - margin.bottom;
+
+  xScale = d3.scaleLinear().domain([2, 30]).range([0, innerW]);
+  yScale = d3.scaleLinear().domain([4, 28]).range([innerH, 0]);
+
+  // Grid
+  scatterG.append('g').attr('class','grid')
+    .selectAll('line.hgrid')
+    .data(yScale.ticks(6))
+    .join('line')
+    .attr('x1',0).attr('x2',innerW)
+    .attr('y1',d=>yScale(d)).attr('y2',d=>yScale(d))
+    .attr('stroke','#f1f5f9').attr('stroke-width',1);
+
+  scatterG.append('g').attr('class','grid')
+    .selectAll('line.vgrid')
+    .data(xScale.ticks(6))
+    .join('line')
+    .attr('y1',0).attr('y2',innerH)
+    .attr('x1',d=>xScale(d)).attr('x2',d=>xScale(d))
+    .attr('stroke','#f1f5f9').attr('stroke-width',1);
+
+  // Axes
+  scatterG.append('g').attr('class', 'x-axis').attr('transform',`translate(0,${innerH})`)
+    .call(d3.axisBottom(xScale).tickValues([0, 10, 20, 30]).tickFormat(d=>d+'%'))
+    .selectAll('text').style('font-size','0.75rem');
+
+  scatterG.append('g').attr('class', 'y-axis')
+    .call(d3.axisLeft(yScale).ticks(6).tickFormat(d=>d+'%'))
+    .selectAll('text').style('font-size','0.75rem');
+
+  // Axis labels
+  scatterSvg.append('text')
+    .attr('x', margin.left + innerW/2).attr('y', h - 8)
+    .attr('text-anchor','middle').attr('font-size','0.85rem').attr('fill','var(--text-light)').attr('font-weight',500)
+    .text('Food Insecurity Rate (%)');
+
+  scatterSvg.append('text')
+    .attr('transform',`rotate(-90)`)
+    .attr('x', -(margin.top + innerH/2)).attr('y', 16)
+    .attr('text-anchor','middle').attr('font-size','0.85rem').attr('fill','var(--text-light)').attr('font-weight',500)
+    .text('Diabetes Prevalence (%)');
+
+  // Regression line
+  const n = countyData.length;
+  const xm = d3.mean(countyData, d=>d.food_insecurity_pct);
+  const ym = d3.mean(countyData, d=>d.diabetes_pct);
+  const ss_xy = d3.sum(countyData, d=>(d.food_insecurity_pct - xm)*(d.diabetes_pct - ym));
+  const ss_xx = d3.sum(countyData, d=>(d.food_insecurity_pct - xm)**2);
+  const slope = ss_xy / ss_xx;
+  const intercept = ym - slope * xm;
+
+  scatterG.append('line')
+    .attr('class','scatter-regression')
+    .attr('x1', xScale(3)).attr('x2', xScale(28))
+    .attr('y1', yScale(intercept + slope*3)).attr('y2', yScale(intercept + slope*28))
+    .attr('stroke','var(--warm)').attr('stroke-width',2).attr('stroke-dasharray','6 4')
+    .attr('opacity',0.7);
+
+  // Brush zoom - add before dots so dots are on top
+  const brush = d3.brush()
+    .extent([[0,0],[innerW,innerH]])
+    .on('end', function(event) {
+      if (!event.selection) {
+        xScale.domain([2,30]);
+        yScale.domain([4,28]);
+        updateScatterPositions();
+        return;
+      }
+      const [[x0,y0],[x1,y1]] = event.selection;
+      xScale.domain([xScale.invert(x0), xScale.invert(x1)]);
+      yScale.domain([yScale.invert(y1), yScale.invert(y0)]);
+      scatterG.select('.brush').call(brush.move, null);
+      updateScatterPositions();
+    });
+
+  scatterG.append('g').attr('class','brush').call(brush)
+    .selectAll('.selection').style('pointer-events', 'none');
+
+  // Points - now added after brush so they're on top and receive mouse events
+  scatterG.selectAll('circle.dot')
+    .data(countyData)
+    .join('circle')
+    .attr('class','dot scatter-dot')
+    .attr('cx', d=>xScale(d.food_insecurity_pct))
+    .attr('cy', d=>yScale(d.diabetes_pct))
+    .attr('r', 2.8)
+    .attr('fill','var(--teal)')
+    .attr('opacity', 0.45)
+    .attr('stroke','none')
+    .on('mouseover', function(event, d) {
+      d3.select(this).attr('r',6).attr('opacity',1).attr('stroke','#000').attr('stroke-width',1.5);
+      const name = getCountyName(d.fips);
+      showTooltip(event,
+        `<strong>${name}</strong> (${d.state})<br>
+         Diabetes: ${d.diabetes_pct.toFixed(1)}%<br>
+         Food Insecurity: ${d.food_insecurity_pct.toFixed(1)}%`
+      );
+    })
+    .on('mousemove', function(event, d) {
+      const name = getCountyName(d.fips);
+      showTooltip(event,
+        `<strong>${name}</strong> (${d.state})<br>
+         Diabetes: ${d.diabetes_pct.toFixed(1)}%<br>
+         Food Insecurity: ${d.food_insecurity_pct.toFixed(1)}%`
+      );
+    })
+    .on('mouseout', function() {
+      const st = d3.select('#state-filter').property('value');
+      const isHighlighted = st !== 'all' && d3.select(this).datum().state === st;
+      d3.select(this)
+        .attr('r', isHighlighted ? 4 : 2.8)
+        .attr('opacity', isHighlighted ? 0.85 : (st === 'all' ? 0.45 : 0.12))
+        .attr('stroke', isHighlighted ? 'var(--warm)' : 'none')
+        .attr('stroke-width', isHighlighted ? 1 : 0);
+      hideTooltip();
+    });
+
+  function updateScatterPositions() {
+    scatterG.select('.x-axis').transition().duration(400)
+      .call(d3.axisBottom(xScale).tickValues([0, 10, 20, 30]).tickFormat(d=>d+'%'));
+    scatterG.select('.y-axis').transition().duration(400)
+      .call(d3.axisLeft(yScale).ticks(6).tickFormat(d=>d+'%'));
+    scatterG.selectAll('circle.dot').transition().duration(400)
+      .attr('cx', d=>xScale(d.food_insecurity_pct))
+      .attr('cy', d=>yScale(d.diabetes_pct));
+    scatterG.select('.scatter-regression').transition().duration(400)
+      .attr('x1', xScale(3)).attr('x2', xScale(28))
+      .attr('y1', yScale(intercept+slope*3)).attr('y2', yScale(intercept+slope*28));
+  }
+}
+
+function updateScatter() {
+  const st = d3.select('#state-filter').property('value');
+  scatterG.selectAll('circle.dot')
+    .transition().duration(300)
+    .attr('fill', d => st !== 'all' && d.state === st ? 'var(--warm)' : 'var(--teal)')
+    .attr('opacity', d => {
+      if (st === 'all') return 0.45;
+      return d.state === st ? 0.85 : 0.12;
+    })
+    .attr('r', d => st !== 'all' && d.state === st ? 4 : 2.8)
+    .attr('stroke', d => st !== 'all' && d.state === st ? 'var(--warm)' : 'none')
+    .attr('stroke-width', d => st !== 'all' && d.state === st ? 1 : 0);
+
+  // Re-order: bring highlighted to front
+  if (st !== 'all') {
+    scatterG.selectAll('circle.dot').sort((a,b) => (a.state === st ? 1 : 0) - (b.state === st ? 1 : 0));
+  }
+}
+
+// ========== HISTOGRAM ==========
+function createHistogram() {
+  const container = document.getElementById('hist-container');
+  const w = container.clientWidth;
+  const h = Math.min(w * 0.55, 400);
+  const margin = { top: 20, right: 30, bottom: 55, left: 60 };
+
+  const svg = d3.select('#hist-container').append('svg')
+    .attr('width', w).attr('height', h);
+
+  const innerW = w - margin.left - margin.right;
+  const innerH = h - margin.top - margin.bottom;
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  // Categorize counties
+  const low = countyData.filter(d => d.food_insecurity_pct < 10);
+  const mid = countyData.filter(d => d.food_insecurity_pct >= 10 && d.food_insecurity_pct < 18);
+  const high = countyData.filter(d => d.food_insecurity_pct >= 18);
+
+  const x = d3.scaleLinear().domain([4, 28]).range([0, innerW]);
+  const bins = d3.bin().domain(x.domain()).thresholds(24);
+
+  const binsLow = bins(low.map(d => d.diabetes_pct));
+  const binsMid = bins(mid.map(d => d.diabetes_pct));
+  const binsHigh = bins(high.map(d => d.diabetes_pct));
+
+  const maxCount = d3.max([...binsLow, ...binsMid, ...binsHigh], d => d.length);
+  const y = d3.scaleLinear().domain([0, maxCount]).nice().range([innerH, 0]);
+
+  // Grid
+  g.selectAll('line.hgrid')
+    .data(y.ticks(5))
+    .join('line')
+    .attr('x1',0).attr('x2',innerW)
+    .attr('y1',d=>y(d)).attr('y2',d=>y(d))
+    .attr('stroke','#f1f5f9').attr('stroke-width',1);
+
+  // Axes
+  g.append('g').attr('transform',`translate(0,${innerH})`)
+    .call(d3.axisBottom(x).ticks(10).tickFormat(d=>d+'%'))
+    .selectAll('text').style('font-size','0.75rem');
+
+  g.append('g')
+    .call(d3.axisLeft(y).ticks(5))
+    .selectAll('text').style('font-size','0.75rem');
+
+  svg.append('text')
+    .attr('x', margin.left + innerW/2).attr('y', h - 8)
+    .attr('text-anchor','middle').attr('font-size','0.85rem').attr('fill','var(--text-light)').attr('font-weight',500)
+    .text('Diabetes Prevalence (%)');
+
+  svg.append('text')
+    .attr('transform','rotate(-90)')
+    .attr('x',-(margin.top + innerH/2)).attr('y',16)
+    .attr('text-anchor','middle').attr('font-size','0.85rem').attr('fill','var(--text-light)').attr('font-weight',500)
+    .text('Number of Counties');
+
+  const colors = { low: '#14b8a6', mid: '#94a3b8', high: '#f59e0b' };
+  const groups = [
+    { key: 'low', bins: binsLow, color: colors.low, label: 'Low FI (<10%)', n: low.length },
+    { key: 'mid', bins: binsMid, color: colors.mid, label: 'Moderate FI (10â€“18%)', n: mid.length },
+    { key: 'high', bins: binsHigh, color: colors.high, label: 'High FI (â‰¥18%)', n: high.length }
+  ];
+
+  const barWidth = (x(binsLow[0].x1) - x(binsLow[0].x0));
+  const subW = barWidth / 3.2;
+
+  groups.forEach((grp, gi) => {
+    g.selectAll(`rect.bar-${grp.key}`)
+      .data(grp.bins)
+      .join('rect')
+      .attr('class', `bar bar-${grp.key}`)
+      .attr('x', d => x(d.x0) + gi * subW + 1)
+      .attr('y', d => y(d.length))
+      .attr('width', subW - 1)
+      .attr('height', d => innerH - y(d.length))
+      .attr('fill', grp.color)
+      .attr('opacity', grp.key === 'mid' && currentHistMode === 'lohi' ? 0 : 0.8)
+      .attr('rx', 1)
+      .on('mouseover', function(event, d) {
+        d3.select(this).attr('opacity', 1);
+        showTooltip(event,
+          `<strong>${grp.label}</strong><br>
+           Diabetes range: ${d.x0.toFixed(0)}â€“${d.x1.toFixed(0)}%<br>
+           Counties: ${d.length}`
+        );
+      })
+      .on('mousemove', function(event, d) {
+        showTooltip(event,
+          `<strong>${grp.label}</strong><br>
+           Diabetes range: ${d.x0.toFixed(0)}â€“${d.x1.toFixed(0)}%<br>
+           Counties: ${d.length}`
+        );
+      })
+      .on('mouseout', function() {
+        const key = d3.select(this).attr('class').split('bar-')[1];
+        const shouldHide = key === 'mid' && currentHistMode === 'lohi';
+        d3.select(this).attr('opacity', shouldHide ? 0 : 0.8);
+        hideTooltip();
+      });
+  });
+
+  // Legend
+  const legend = d3.select('#hist-legend');
+  legend.html('');
+  groups.forEach(grp => {
+    legend.append('span').style('display','inline-block').style('width','12px').style('height','12px')
+      .style('background', grp.color).style('border-radius','2px').style('vertical-align','middle');
+    legend.append('span').text(` ${grp.label} (n=${grp.n.toLocaleString()}) `).style('margin-right','1rem');
+  });
+}
+
+function toggleHistMode(mode) {
+  currentHistMode = mode;
+  d3.select('#btn-hist-all').classed('active', mode === 'all');
+  d3.select('#btn-hist-lohi').classed('active', mode === 'lohi');
+
+  d3.selectAll('rect.bar-mid')
+    .transition().duration(400)
+    .attr('opacity', mode === 'lohi' ? 0 : 0.8);
+}
+</script>
+</body>
+</html>
