@@ -386,8 +386,8 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
 <section class="animate-in">
   <span class="section-label">Introduction</span>
   <h2>Background and Motivation</h2>
-  <p class="lead">Nearly 38 million Americans are living with diabetes, and about one in eight U.S. households experiences food insecurity. These two problems tend to be concentrated in the same areas, which suggests they may be shaped by similar local conditions.</p>
-  <p>This analysis uses county-level data from 47 states and the District of Columbia to examine how diabetes prevalence varies with food insecurity. The question is whether counties with higher food insecurity also tend to report higher rates of diagnosed diabetes. Diabetes imposes a large economic and health burden, while food insecurity is closely tied to poor diet quality and limited access to nutritious foods. If food access is related to diabetes prevalence, this relationship has important implications for understanding health disparities.</p>
+  <p class="lead">Nearly 38 million Americans are living with diabetes, and about one in eight U.S. households experiences food insecurity. Diabetes alone costs the nation an estimated $413 billion per year in medical expenses and lost productivity (Parker et al., 2024), and the counties bearing the highest diabetes burden are often the same ones where residents struggle to afford enough food.</p>
+  <p>This analysis uses county-level data from 47 states and the District of Columbia to examine how diabetes prevalence varies with food insecurity. The question is this: Do counties with higher food insecurity also tend to report higher rates of diagnosed diabetes? Diabetes imposes a large economic and health burden, while food insecurity is closely tied to poor diet quality and limited access to nutritious foods. If food access is related to diabetes prevalence, this relationship has important implications for how we think about health spending and prevention.</p>
 
   <div class="stat-row">
     <div class="stat-card">
@@ -508,6 +508,7 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
   <h2>Data Sources &amp; Methodology</h2>
   <p>Diabetes prevalence data come from the <strong>CDC PLACES</strong> (Population Level Analysis and Community Estimates) program, which provides model-based estimates of diagnosed diabetes among adults aged 18 and older at the census-tract and county level. Food insecurity data come from <strong>County Health Rankings &amp; Roadmaps</strong>, a collaboration between the Robert Wood Johnson Foundation and the University of Wisconsin Population Health Institute, which estimates the share of the population lacking reliable access to sufficient, nutritious food. Both datasets are linked at the county level using Federal Information Processing Standard (FIPS) codes.</p>
   <p>This analysis aggregates 77,936 census-tract-level observations to 2,945 unique counties for the year 2023, computing mean diabetes prevalence and food insecurity for each county. Pearson correlation and quintile comparisons are used to characterize the relationship. All visualizations were built with D3.js v7 and TopoJSON. County geographic boundaries use the U.S. Census Bureau's cartographic boundary files via the us-atlas package.</p>
+  <p>The estimated national cost of diabetes cited in the introduction comes from Parker, E. D., Lin, J., Mahoney, T., Ume, N., Yang, G., Gabbay, R. A., ElSayed, N. A., &amp; Bannuru, R. R. (2024). Economic costs of diabetes in the U.S. in 2022. <em>Diabetes Care</em>, <em>47</em>(1), 26–43. <a href="https://doi.org/10.2337/dci23-0085" target="_blank">https://doi.org/10.2337/dci23-0085</a></p>
 </section>
 </div>
 
