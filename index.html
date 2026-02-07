@@ -378,7 +378,7 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
 <header class="hero">
   <div class="tag">County-Level Analysis</div>
   <h1>Food Insecurity and Diabetes Across the U.S.</h1>
-  <p class="subtitle">How food insecurity shapes diabetes prevalence across 2,945 U.S. counties and why targeted interventions could save lives and billions in healthcare costs.</p>
+  <p class="subtitle">An analysis of diabetes prevalence and food insecurity across U.S.</p>
 </header>
 
 <!-- INTRODUCTION -->
@@ -387,7 +387,7 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
   <span class="section-label">Introduction</span>
   <h2>Background and Motivation</h2>
   <p class="lead">Nearly 38 million Americans are living with diabetes, and about one in eight U.S. households experiences food insecurity. These two problems often appear in the same places, suggesting that they may be linked through shared economic and social conditions.</p>
-  <p>This analysis examines county-level data across 47 states and the District of Columbia to answer a pressing policy question: <em>How does diabetes prevalence vary across U.S. counties with different levels of food insecurity?</em> The answer matters enormously. Diabetes costs the nation over $400 billion annually in medical expenses and lost productivity, while food insecurity drives poor diet quality and reliance on cheap, calorie-dense, nutrient-poor foods that fuel chronic disease. If food access is a meaningful driver of diabetes risk, then food assistance programs become not just anti-hunger tools, but preventive health investments.</p>
+  <p>This analysis uses county-level data from 47 states and the District of Columbia to examine how diabetes prevalence varies with food insecurity. Specifically, it asks whether counties with higher rates of food insecurity also tend to have higher rates of diagnosed diabetes.This is very important. Diabetes imposes a large economic and health burden, while food insecurity is closely tied to poor diet quality and limited access to nutritious foods. If food access is related to diabetes prevalence, then policies that improve food security may also contribute to better long-term health outcomes.</p>
 
   <div class="stat-row">
     <div class="stat-card">
@@ -409,8 +409,8 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
 <section>
   <span class="section-label">Visualization 1 : Geographic Patterns</span>
   <h2>Geographic Patterns in Food Insecurity and Diabetes</h2>
-  <p>The interactive map below paints a vivid geographic picture. Toggle between diabetes prevalence and food insecurity to see how the two conditions cluster in the same regions, particularly across the Deep South, Appalachia, and parts of the Southwest. Counties in Mississippi average 17.7% diabetes prevalence alongside 18.2% food insecurity, both well above the national county medians. Meanwhile, counties in Colorado, Massachusetts, and New Hampshire consistently sit at the lower end of both measures. This regional concentration suggests that place-based factor like poverty, limited grocery access, and fewer healthcare providers, compound to create environments where both food insecurity and diabetes thrive together.</p>
-  <p>Over one-third of all U.S. counties (1,050 of 2,945) carry a "double burden," with above-average rates of both diabetes and food insecurity simultaneously. These are the communities where targeted, multi-pronged interventions could yield the greatest returns. The geographic clustering also points to systemic causes: these are not random patterns, but reflections of entrenched structural inequities in food systems and healthcare infrastructure.</p>
+  <p>Several regional patterns stand out. Counties in the Deep South, Appalachia, and parts of the Southwest tend to have higher levels of both food insecurity and diabetes, while many counties in the Northeast and Mountain West fall at the lower end of both measures. For example, counties in Mississippi generally show higher rates of diabetes and food insecurity compared with counties in states such as Colorado and Massachusetts.</p>
+  <p>Over 1/3 of all U.S. counties have above-average levels of both food insecurity and diabetes. These counties represent places where economic and health challenges overlap, making them important for understanding how local conditions shape population health.</p>
 
   <div class="viz-container">
     <div class="viz-controls">
@@ -420,7 +420,7 @@ svg text { font-family: 'IBM Plex Sans', sans-serif; }
     </div>
     <div id="map-container"></div>
     <div class="legend" id="map-legend"></div>
-    <p style="font-size:0.78rem;color:var(--text-light);margin-top:0.5rem;margin-bottom:0;">Hover over any county for details. Scroll to zoom; drag to pan. Counties in gray have no data available.</p>
+    <p style="font-size:0.78rem;color:var(--text-light);margin-top:0.5rem;margin-bottom:0;">Hover over any county for details. Scroll to zoom and drag to pan. Counties in gray have no data available.</p>
   </div>
 </section>
 
